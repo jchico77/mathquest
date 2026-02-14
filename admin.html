@@ -376,6 +376,17 @@
         }
 
         function renderAll() {
+            // Capture open states
+            const openIndices = new Set();
+            document.querySelectorAll('.topic-header.open').forEach(el => {
+                // Find index based on position in parent or stored attribute
+                // The parent is topic-card. The container has topic-cards.
+                // We can use the index of the parent topic-card.
+                const cards = Array.from(document.querySelectorAll('.topic-card'));
+                const idx = cards.indexOf(el.parentElement);
+                if (idx !== -1) openIndices.add(idx);
+            });
+
             const container = document.getElementById('topics');
             if (allTopics.length === 0) {
                 container.innerHTML = '<p style="text-align:center; padding:2rem; opacity:0.6;">Cargando temas...</p>';
@@ -385,6 +396,7 @@
             container.innerHTML = allTopics.map((topic, tIdx) => {
                 const batchCount = topic.exercises.filter(e => e.type === 'batch').length;
                 const singleCount = topic.exercises.filter(e => e.type !== 'batch').length;
+                const isOpen = openIndices.has(tIdx);
 
                 const exercisesHTML = topic.exercises.map((ex, eIdx) => {
                     const key = `${tIdx}-${eIdx}`;
@@ -423,7 +435,7 @@
 
                 return `
                   <div class="topic-card">
-                    <div class="topic-header" onclick="toggleTopic(this)">
+                    <div class="topic-header ${isOpen ? 'open' : ''}" onclick="toggleTopic(this)">
                       <div class="topic-title">
                         <span class="topic-icon">${topic.icon}</span>
                         <span>${topic.topic}</span>
@@ -431,7 +443,7 @@
                       <span class="counts">${batchCount} lotes · ${singleCount} solos</span>
                       <span class="arrow">▸</span>
                     </div>
-                    <div class="exercise-list">${exercisesHTML}</div>
+                    <div class="exercise-list ${isOpen ? 'visible' : ''}">${exercisesHTML}</div>
                   </div>
                 `;
             }).join('');
