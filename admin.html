@@ -313,6 +313,24 @@
             color: var(--text);
             border-color: var(--accent);
         }
+
+        .btn-icon-delete {
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 1rem;
+            opacity: 0.5;
+            transition: all 0.2s;
+            margin-left: 0.5rem;
+            padding: 0.2rem;
+            border-radius: 4px;
+        }
+
+        .btn-icon-delete:hover {
+            opacity: 1;
+            background: rgba(255, 82, 82, 0.2);
+            color: var(--error);
+        }
     </style>
 </head>
 
@@ -382,6 +400,7 @@
                                 <label style="font-size:0.8rem; margin-left:1rem; cursor:pointer; display:flex; align-items:center; gap:0.3rem;">
                                     <input type="checkbox" ${ex.allowInput ? 'checked' : ''} onchange="updateProp(${tIdx}, ${eIdx}, 'allowInput', this.checked)"> 📝 Permitir Texto
                                 </label>
+                                <button class="btn-icon-delete" onclick="deleteExercise(${tIdx}, ${eIdx})" title="Eliminar lote completo">🗑️</button>
                             </div>
                             <div class="batch-items">${itemsHTML}</div>
                           </div>
@@ -396,6 +415,7 @@
                             <label style="font-size:0.8rem; margin-left:auto; cursor:pointer; display:flex; align-items:center; gap:0.3rem;">
                                 <input type="checkbox" ${ex.allowInput ? 'checked' : ''} onchange="updateProp(${tIdx}, ${eIdx}, 'allowInput', this.checked)"> 📝 Texto
                             </label>
+                            <button class="btn-icon-delete" onclick="deleteExercise(${tIdx}, ${eIdx})" title="Eliminar ejercicio">🗑️</button>
                           </div>
                         `;
                     }
@@ -581,6 +601,13 @@
             selected.clear();
             renderAll();
             showToast(`✅ Agrupados ${batchItems.length} ejercicios en un lote`);
+        };
+
+        window.deleteExercise = (tIdx, eIdx) => {
+            if (!confirm('¿Seguro que quieres eliminar este ejercicio?')) return;
+            allTopics[tIdx].exercises.splice(eIdx, 1);
+            renderAll();
+            showToast('🗑️ Eliminado (recuerda Guardar Cambios)');
         };
 
         async function saveTopic(id, exercises) {
