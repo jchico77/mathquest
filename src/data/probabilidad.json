@@ -1,0 +1,85 @@
+{
+    "topic": "Probabilidad y Estadística",
+    "icon": "🎲",
+    "color": "#A55EEA",
+    "exercises": [
+        {
+            "id": "batch-1771035533369",
+            "type": "batch",
+            "batchTitle": "Ejercicios variados",
+            "items": [
+                {
+                    "statement": "Lanzamos un dado. ¿Cuál es la probabilidad de sacar un 3?",
+                    "answer": "1/6"
+                },
+                {
+                    "statement": "Lanzamos un dado. ¿Cuál es la probabilidad de sacar un número par?",
+                    "answer": "3/6 = 1/2"
+                },
+                {
+                    "statement": "Lanzamos una moneda 2 veces. ¿Cuál es la probabilidad de obtener 2 caras?",
+                    "answer": "1/4"
+                }
+            ],
+            "difficulty": 1,
+            "hints": []
+        },
+        {
+            "id": "pro-003",
+            "statement": "En una bolsa hay 3 bolas rojas, 2 azules y 5 verdes. ¿Cuál es la probabilidad de sacar una bola azul?",
+            "answer": "2/10 = 1/5",
+            "difficulty": 1,
+            "hints": [
+                "Total de bolas: 3 + 2 + 5 = 10",
+                "Azules: 2",
+                "P = 2/10 = 1/5"
+            ]
+        },
+        {
+            "id": "batch-1771035510530",
+            "type": "batch",
+            "batchTitle": "Ejercicios variados",
+            "items": [
+                {
+                    "statement": "Calcula la media aritmética de: 5, 8, 3, 7, 12",
+                    "answer": "7"
+                },
+                {
+                    "statement": "Calcula la mediana de: 3, 7, 1, 9, 5",
+                    "answer": "5"
+                },
+                {
+                    "statement": "Calcula la moda de: 2, 3, 5, 3, 7, 3, 8, 5",
+                    "answer": "3"
+                },
+                {
+                    "statement": "Calcula el rango de: 12, 5, 8, 15, 3, 20",
+                    "answer": "17"
+                }
+            ],
+            "difficulty": 1,
+            "hints": []
+        },
+        {
+            "id": "pro-007",
+            "statement": "Las notas de un alumno son: 6, 7, 5, 8, 4. Calcula la media y di si aprueba (≥5).",
+            "answer": "Media = 6. Sí aprueba.",
+            "difficulty": 1,
+            "hints": [
+                "Suma: 6+7+5+8+4 = 30",
+                "Media: 30/5 = 6",
+                "6 ≥ 5, así que aprueba"
+            ]
+        },
+        {
+            "id": "pro-010",
+            "statement": "En una clase, la frecuencia absoluta de la nota 7 es 8, y hay 32 alumnos en total. ¿Cuál es la frecuencia relativa de la nota 7?",
+            "answer": "0,25 ó 1/4 ó 25%",
+            "difficulty": 2,
+            "hints": [
+                "Frecuencia relativa = frecuencia absoluta / total",
+                "8/32 = 1/4 = 0,25 = 25%"
+            ]
+        }
+    ]
+}

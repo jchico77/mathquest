@@ -1,0 +1,190 @@
+{
+    "topic": "Potencias y Raíces",
+    "icon": "⚡",
+    "color": "#FF9F43",
+    "exercises": [
+        {
+            "id": "pot-b01",
+            "type": "batch",
+            "batchTitle": "Calcula estas potencias",
+            "items": [
+                {
+                    "statement": "2⁵",
+                    "answer": "32"
+                },
+                {
+                    "statement": "3⁴",
+                    "answer": "81"
+                },
+                {
+                    "statement": "(-2)⁴",
+                    "answer": "16"
+                },
+                {
+                    "statement": "5³",
+                    "answer": "125"
+                },
+                {
+                    "statement": "(-3)³",
+                    "answer": "-27"
+                }
+            ],
+            "difficulty": 1,
+            "hints": [
+                "Multiplica la base por sí misma tantas veces como indique el exponente",
+                "Exponente par → siempre positivo",
+                "Exponente impar → conserva el signo"
+            ]
+        },
+        {
+            "id": "pot-b02",
+            "type": "batch",
+            "batchTitle": "Calcula estas raíces",
+            "items": [
+                {
+                    "statement": "√144",
+                    "answer": "12"
+                },
+                {
+                    "statement": "√81",
+                    "answer": "9"
+                },
+                {
+                    "statement": "√25",
+                    "answer": "5"
+                },
+                {
+                    "statement": "√196",
+                    "answer": "14"
+                },
+                {
+                    "statement": "√64",
+                    "answer": "8"
+                }
+            ],
+            "difficulty": 1,
+            "hints": [
+                "¿Qué número multiplicado por sí mismo da el resultado?",
+                "Aprende las raíces cuadradas más comunes"
+            ]
+        },
+        {
+            "id": "pot-b03",
+            "type": "batch",
+            "batchTitle": "Potencias especiales",
+            "items": [
+                {
+                    "statement": "2⁰",
+                    "answer": "1"
+                },
+                {
+                    "statement": "5⁰",
+                    "answer": "1"
+                },
+                {
+                    "statement": "10⁰",
+                    "answer": "1"
+                },
+                {
+                    "statement": "(-7)⁰",
+                    "answer": "1"
+                },
+                {
+                    "statement": "1¹⁰⁰",
+                    "answer": "1"
+                }
+            ],
+            "difficulty": 1,
+            "hints": [
+                "Cualquier número elevado a 0 es 1 (excepto 0⁰)",
+                "1 elevado a cualquier cosa es 1"
+            ]
+        },
+        {
+            "id": "pot-b04",
+            "type": "batch",
+            "batchTitle": "Simplifica usando propiedades",
+            "items": [
+                {
+                    "statement": "2³ · 2⁴",
+                    "answer": "2⁷ = 128"
+                },
+                {
+                    "statement": "5⁶ : 5²",
+                    "answer": "5⁴ = 625"
+                },
+                {
+                    "statement": "(2³)²",
+                    "answer": "2⁶ = 64"
+                },
+                {
+                    "statement": "10⁴ · 10⁻²",
+                    "answer": "10² = 100"
+                },
+                {
+                    "statement": "3⁵ : 3³",
+                    "answer": "3² = 9"
+                }
+            ],
+            "difficulty": 2,
+            "hints": [
+                "Misma base, multiplicar → suma exponentes",
+                "Misma base, dividir → resta exponentes",
+                "Potencia de potencia → multiplica exponentes"
+            ]
+        },
+        {
+            "id": "batch-1771035398693",
+            "type": "batch",
+            "batchTitle": "Ejercicios variados",
+            "items": [
+                {
+                    "statement": "Expresa en notación científica: 4.500.000",
+                    "answer": "4,5 · 10⁶"
+                },
+                {
+                    "statement": "Expresa en notación científica: 0,00032",
+                    "answer": "3,2 · 10⁻⁴"
+                },
+                {
+                    "statement": "Un virus mide 0,0000003 metros. Exprésalo en notación científica.",
+                    "answer": "3 · 10⁻⁷ m"
+                }
+            ],
+            "difficulty": 1,
+            "hints": []
+        },
+        {
+            "id": "batch-1771035610641",
+            "type": "batch",
+            "batchTitle": "Potencias Relámpago",
+            "items": [
+                {
+                    "statement": "Simplifica: (3²)³ : 3⁴",
+                    "answer": "3² = 9"
+                },
+                {
+                    "statement": "Simplifica: (2²)³ : 2⁴",
+                    "answer": "2² = 4"
+                },
+                {
+                    "statement": "Simplifica: (4²)² : 4²",
+                    "answer": "4² = 16"
+                },
+                {
+                    "statement": "Simplifica: (5²)² : 5³",
+                    "answer": "5¹ = 5"
+                },
+                {
+                    "statement": "Simplifica: (2³)² : 2³",
+                    "answer": "2³ = 8"
+                }
+            ],
+            "difficulty": 3,
+            "hints": [
+                "Paso 1: Multiplica los exponentes que están separados por un paréntesis (potencia de potencia).",
+                "Paso 2: Resta los exponentes cuando veas el signo de dividir (:) entre bases iguales."
+            ]
+        }
+    ]
+}

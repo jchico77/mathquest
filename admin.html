@@ -1,0 +1,597 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>MathQuest - Admin</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;700&display=swap"
+        rel="stylesheet" />
+    <style>
+        :root {
+            --bg: #0a0a1a;
+            --bg-card: rgba(25, 25, 60, 0.7);
+            --text: #f0f0ff;
+            --text-secondary: #a0a0cc;
+            --accent: #7c5cfc;
+            --success: #00e676;
+            --warning: #ffab00;
+            --error: #ff5252;
+            --font: 'Outfit', sans-serif;
+            --mono: 'JetBrains Mono', monospace;
+        }
+
+        *,
+        *::before,
+        *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: var(--font);
+            background: var(--bg);
+            color: var(--text);
+            padding: 1.5rem;
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            font-size: 1.6rem;
+            margin-bottom: 0.5rem;
+            background: linear-gradient(135deg, #7c5cfc, #00d4ff);
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .subtitle {
+            color: var(--text-secondary);
+            margin-bottom: 1.5rem;
+            font-size: 0.9rem;
+        }
+
+        .topic-section {
+            margin-bottom: 2rem;
+        }
+
+        .topic-header {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.6rem 1rem;
+            background: var(--bg-card);
+            border-radius: 10px;
+            margin-bottom: 0.5rem;
+            cursor: pointer;
+            user-select: none;
+            border: 1px solid rgba(255, 255, 255, 0.06);
+        }
+
+        .topic-header:hover {
+            border-color: rgba(255, 255, 255, 0.15);
+        }
+
+        .topic-header .icon {
+            font-size: 1.3rem;
+        }
+
+        .topic-header .name {
+            font-weight: 700;
+            flex: 1;
+        }
+
+        .topic-header .counts {
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            font-family: var(--mono);
+        }
+
+        .topic-header .arrow {
+            transition: transform 0.2s;
+        }
+
+        .topic-header.open .arrow {
+            transform: rotate(90deg);
+        }
+
+        .exercise-list {
+            display: none;
+            margin-left: 0.5rem;
+            border-left: 2px solid rgba(124, 92, 252, 0.2);
+            padding-left: 0.75rem;
+        }
+
+        .exercise-list.visible {
+            display: block;
+        }
+
+        .ex-item {
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+            padding: 0.4rem 0.6rem;
+            border-radius: 8px;
+            font-size: 0.88rem;
+            transition: background 0.15s;
+        }
+
+        .ex-item:hover {
+            background: rgba(255, 255, 255, 0.04);
+        }
+
+        .ex-item input[type="checkbox"] {
+            accent-color: var(--accent);
+            width: 16px;
+            height: 16px;
+            cursor: pointer;
+        }
+
+        .ex-item .badge {
+            display: inline-block;
+            padding: 0.15rem 0.5rem;
+            border-radius: 999px;
+            font-size: 0.7rem;
+            font-weight: 700;
+            letter-spacing: 0.3px;
+        }
+
+        .badge--single {
+            background: rgba(255, 82, 82, 0.15);
+            color: var(--error);
+            border: 1px solid rgba(255, 82, 82, 0.25);
+        }
+
+        .badge--batch {
+            background: rgba(0, 230, 118, 0.12);
+            color: var(--success);
+            border: 1px solid rgba(0, 230, 118, 0.2);
+        }
+
+        .ex-item .statement {
+            flex: 1;
+            font-family: var(--mono);
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+        }
+
+        .ex-item .answer {
+            font-family: var(--mono);
+            font-size: 0.8rem;
+            color: var(--accent);
+        }
+
+        .batch-group {
+            background: rgba(0, 230, 118, 0.04);
+            border: 1px solid rgba(0, 230, 118, 0.1);
+            border-radius: 8px;
+            padding: 0.4rem 0.6rem;
+            margin: 0.25rem 0;
+        }
+
+        .batch-group .batch-label {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            font-weight: 700;
+            font-size: 0.82rem;
+            color: var(--success);
+            margin-bottom: 0.3rem;
+        }
+
+        .batch-group .batch-items {
+            padding-left: 1rem;
+        }
+
+        .batch-group .batch-items .bi {
+            font-family: var(--mono);
+            font-size: 0.82rem;
+            color: var(--text-secondary);
+            padding: 0.15rem 0;
+        }
+
+        .toolbar {
+            position: sticky;
+            bottom: 0;
+            padding: 0.75rem;
+            background: rgba(10, 10, 26, 0.95);
+            backdrop-filter: blur(10px);
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            border-radius: 12px 12px 0 0;
+            margin: 0 -1.5rem;
+            padding: 0.75rem 1.5rem;
+        }
+
+        .toolbar .selected-count {
+            font-family: var(--mono);
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+        }
+
+        .toolbar-actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .toolbar .btn {
+            padding: 0.5rem 1.2rem;
+            border: none;
+            border-radius: 10px;
+            font-family: var(--font);
+            font-weight: 600;
+            cursor: pointer;
+            font-size: 0.88rem;
+            transition: all 0.2s;
+        }
+
+        .btn--convert {
+            background: linear-gradient(135deg, #7c5cfc, #00d4ff);
+            color: white;
+        }
+
+        .btn--convert:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 15px rgba(124, 92, 252, 0.3);
+        }
+
+        .btn--convert:disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+            transform: none !important;
+            box-shadow: none !important;
+        }
+
+        .btn--save {
+            background: rgba(0, 230, 118, 0.15);
+            color: var(--success);
+            border: 1px solid rgba(0, 230, 118, 0.3);
+        }
+
+        .btn--save:hover {
+            background: rgba(0, 230, 118, 0.25);
+        }
+
+        .toast {
+            position: fixed;
+            top: 1rem;
+            right: 1rem;
+            padding: 0.6rem 1.2rem;
+            background: rgba(0, 230, 118, 0.2);
+            border: 1px solid rgba(0, 230, 118, 0.4);
+            color: var(--success);
+            border-radius: 10px;
+            font-weight: 600;
+            font-size: 0.85rem;
+            opacity: 0;
+            transform: translateY(-10px);
+            transition: all 0.3s;
+            pointer-events: none;
+            z-index: 999;
+        }
+
+        .toast.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .batch-title-input {
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            color: var(--text);
+            padding: 0.4rem 0.8rem;
+            border-radius: 8px;
+            font-family: var(--font);
+            font-size: 0.85rem;
+            width: 250px;
+        }
+
+        .batch-title-input::placeholder {
+            color: rgba(255, 255, 255, 0.3);
+        }
+
+        .home-link {
+            position: absolute;
+            top: 1.5rem;
+            right: 1.5rem;
+            text-decoration: none;
+            color: var(--text-secondary);
+            font-weight: 600;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            transition: all 0.2s;
+        }
+
+        .home-link:hover {
+            background: rgba(255, 255, 255, 0.1);
+            color: var(--text);
+            border-color: var(--accent);
+        }
+    </style>
+</head>
+
+<body>
+    <a href="/" class="home-link">🏠 Volver a App</a>
+    <h1>🛠️ MathQuest Admin</h1>
+    <p class="subtitle">Gestionar ejercicios por categoría. Selecciona ejercicios sueltos para agruparlos en lotes de 5.
+    </p>
+
+    <div id="topics"></div>
+
+    <div class="toolbar">
+        <span class="selected-count" id="selectedCount">0 seleccionados</span>
+        <div class="toolbar-actions">
+            <button class="btn btn--convert" id="aiBtn" style="display:none" onclick="generateBatch()">✨ Generar +4
+                (Total 5)</button>
+            <button class="btn btn--convert" id="groupBtn" style="display:none" onclick="groupSelection()">📦 Agrupar
+                selección</button>
+            <button class="btn btn--save" onclick="saveAllChanges()">💾 Guardar Cambios</button>
+        </div>
+    </div>
+
+    <div class="toast" id="toast"></div>
+
+    <script type="module">
+        // Import all data files
+        import enterosData from './src/data/enteros.json';
+        import potenciasData from './src/data/potencias.json';
+        import fraccionesData from './src/data/fracciones.json';
+        import fraccionesOpsData from './src/data/fracciones-ops.json';
+        import porcentajesData from './src/data/porcentajes.json';
+        import probabilidadData from './src/data/probabilidad.json';
+        import algebraData from './src/data/algebra.json';
+
+        const allTopics = [enterosData, potenciasData, fraccionesData, fraccionesOpsData, porcentajesData, probabilidadData, algebraData];
+        const topicFilenames = ['enteros.json', 'potencias.json', 'fracciones.json', 'fracciones-ops.json', 'porcentajes.json', 'probabilidad.json', 'algebra.json'];
+
+        let selected = new Set();
+
+        window.allTopics = allTopics;
+
+        function renderAll() {
+            const container = document.getElementById('topics');
+            container.innerHTML = allTopics.map((topic, tIdx) => {
+                const batchCount = topic.exercises.filter(e => e.type === 'batch').length;
+                const singleCount = topic.exercises.filter(e => e.type !== 'batch').length;
+
+                const exercisesHTML = topic.exercises.map((ex, eIdx) => {
+                    if (ex.type === 'batch') {
+                        const itemsHTML = ex.items.map((item, iIdx) =>
+                            `<div class="bi">${iIdx + 1}. ${item.statement} = ${item.answer}</div>`
+                        ).join('');
+                        return `
+              <div class="batch-group">
+                <div class="batch-label">
+                    <span>📦 ${ex.batchTitle || 'Lote sin título'} (${ex.items.length} items)</span>
+                    <label style="font-size:0.8rem; margin-left:1rem; cursor:pointer; display:flex; align-items:center; gap:0.3rem;">
+                        <input type="checkbox" ${ex.allowInput ? 'checked' : ''} onchange="updateProp(${tIdx}, ${eIdx}, 'allowInput', this.checked)"> 📝 Permitir Texto
+                    </label>
+                </div>
+                <div class="batch-items">${itemsHTML}</div>
+              </div>
+            `;
+                    } else {
+                        const key = `${tIdx}-${eIdx}`;
+                        return `
+              <div class="ex-item">
+                <input type="checkbox" data-key="${key}" onchange="toggleSelect('${key}', this.checked)" ${selected.has(key) ? 'checked' : ''} />
+                <span class="badge badge--single">SOLO</span>
+                <span class="statement">${ex.statement}</span>
+                <span class="answer">→ ${ex.answer}</span>
+                <label style="font-size:0.8rem; margin-left:auto; cursor:pointer; display:flex; align-items:center; gap:0.3rem;">
+                    <input type="checkbox" ${ex.allowInput ? 'checked' : ''} onchange="updateProp(${tIdx}, ${eIdx}, 'allowInput', this.checked)"> 📝 Texto
+                </label>
+              </div>
+            `;
+                    }
+                }).join('');
+
+                return `
+          <div class="topic-section">
+            <div class="topic-header" onclick="toggleTopic(this)">
+              <span class="icon">${topic.icon}</span>
+              <span class="name">${topic.topic}</span>
+              <span class="counts">${batchCount} lotes · ${singleCount} solos</span>
+              <span class="arrow">▸</span>
+            </div>
+            <div class="exercise-list">${exercisesHTML}</div>
+          </div>
+        `;
+            }).join('');
+
+            updateToolbar();
+        }
+
+        window.updateProp = (tIdx, eIdx, prop, value) => {
+            allTopics[tIdx].exercises[eIdx][prop] = value;
+            showToast('Cambio registrado (no guardado)');
+        };
+
+        window.saveAllChanges = async () => {
+            const btn = document.querySelector('.btn--save');
+            const originalText = btn.textContent;
+            btn.textContent = '⏳ Guardando...';
+            btn.disabled = true;
+
+            try {
+                for (let i = 0; i < allTopics.length; i++) {
+                    await saveTopic(topicFilenames[i], allTopics[i]);
+                }
+                showToast('✅ TODOS los cambios guardados');
+            } catch (err) {
+                console.error(err);
+                showToast('❌ Error guardando: ' + err.message);
+            } finally {
+                btn.textContent = originalText;
+                btn.disabled = false;
+            }
+        };
+
+        window.toggleTopic = (el) => {
+            el.classList.toggle('open');
+            el.nextElementSibling.classList.toggle('visible');
+        };
+
+        window.toggleSelect = (key, checked) => {
+            if (checked) selected.add(key); else selected.delete(key);
+            updateToolbar();
+        };
+
+        function updateToolbar() {
+            const count = selected.size;
+            document.getElementById('selectedCount').textContent = `${count} seleccionados`;
+
+            const aiBtn = document.getElementById('aiBtn');
+            const groupBtn = document.getElementById('groupBtn');
+
+            if (count === 1) {
+                aiBtn.style.display = 'inline-block';
+                groupBtn.style.display = 'none';
+            } else if (count > 1) {
+                aiBtn.style.display = 'none';
+                groupBtn.style.display = 'inline-block';
+                groupBtn.textContent = `📦 Agrupar ${count} en lote`;
+            } else {
+                aiBtn.style.display = 'none';
+                groupBtn.style.display = 'none';
+            }
+        }
+
+        window.generateBatch = async () => {
+            if (selected.size !== 1) return;
+            const selectedKey = [...selected][0];
+
+            const [tIdx, eIdx] = selectedKey.split('-').map(Number);
+            const topic = allTopics[tIdx];
+            const originalEx = topic.exercises[eIdx];
+            const filename = topicFilenames[tIdx];
+
+            const btn = document.getElementById('aiBtn');
+            const originalText = btn.textContent;
+            btn.textContent = '⏳ Generando...';
+            btn.disabled = true;
+
+            try {
+                const response = await fetch('/api/generate-batch', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        statement: originalEx.statement,
+                        answer: originalEx.answer,
+                        topic: topic.topic
+                    })
+                });
+
+                if (!response.ok) throw new Error('Error en generación');
+                const newBatchItems = await response.json();
+
+                const generatedItems = newBatchItems.items;
+                const finalItems = [
+                    { statement: originalEx.statement, answer: originalEx.answer },
+                    ...generatedItems
+                ];
+
+                const newBatch = {
+                    id: `batch-${Date.now()}`,
+                    type: 'batch',
+                    batchTitle: newBatchItems.batchTitle || 'Lote generado',
+                    items: finalItems,
+                    difficulty: originalEx.difficulty || 1,
+                    hints: newBatchItems.hints || originalEx.hints || []
+                };
+
+                topic.exercises[eIdx] = newBatch;
+                await saveTopic(filename, topic);
+
+                selected.clear();
+                renderAll();
+                showToast('✅ Lote generado (1 orig + 4 nuevos) y guardado');
+
+            } catch (err) {
+                console.error(err);
+                showToast('❌ Error: ' + err.message);
+            } finally {
+                btn.textContent = originalText;
+                btn.disabled = false;
+                updateToolbar();
+            }
+        };
+
+        window.groupSelection = async () => {
+            if (selected.size < 2) return;
+            const title = prompt("Título para el nuevo lote:", "Ejercicios variados");
+            if (!title) return;
+
+            const keys = [...selected];
+            const byTopic = {};
+            keys.forEach(key => {
+                const [tIdx, eIdx] = key.split('-').map(Number);
+                if (!byTopic[tIdx]) byTopic[tIdx] = [];
+                byTopic[tIdx].push(eIdx);
+            });
+
+            if (Object.keys(byTopic).length > 1) {
+                showToast('⚠️ Selecciona ejercicios de una misma categoría');
+                return;
+            }
+
+            const tIdx = Number(Object.keys(byTopic)[0]);
+            const eIndices = byTopic[tIdx].sort((a, b) => b - a);
+            const topic = allTopics[tIdx];
+            const filename = topicFilenames[tIdx];
+
+            const batchItems = eIndices.map(eIdx => {
+                const ex = topic.exercises[eIdx];
+                return { statement: ex.statement, answer: ex.answer };
+            }).reverse();
+
+            const batchEx = {
+                id: `batch-${Date.now()}`,
+                type: 'batch',
+                batchTitle: title,
+                items: batchItems,
+                difficulty: 1,
+                hints: []
+            };
+
+            eIndices.forEach(eIdx => {
+                topic.exercises.splice(eIdx, 1);
+            });
+
+            const insertPos = Math.min(...byTopic[tIdx]);
+            topic.exercises.splice(insertPos, 0, batchEx);
+
+            await saveTopic(filename, topic);
+
+            selected.clear();
+            renderAll();
+            showToast(`✅ Agrupados ${batchItems.length} ejercicios en un lote`);
+        };
+
+        async function saveTopic(filename, data) {
+            const res = await fetch('/api/save-topic', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ filename, data })
+            });
+            if (!res.ok) throw new Error('Error guardando archivo');
+        }
+
+        window.showToast = (msg) => {
+            const t = document.getElementById('toast');
+            t.textContent = msg;
+            t.classList.add('show');
+            setTimeout(() => t.classList.remove('show'), 2500);
+        };
+
+        renderAll();
+    </script>
+</body>
+
+</html>

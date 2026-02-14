@@ -1,0 +1,183 @@
+{
+    "topic": "Números Enteros",
+    "icon": "🔢",
+    "color": "#FF6B6B",
+    "exercises": [
+        {
+            "id": "ent-b01",
+            "type": "batch",
+            "batchTitle": "Operaciones con enteros",
+            "items": [
+                {
+                    "statement": "(-3) + (+7)",
+                    "answer": "4"
+                },
+                {
+                    "statement": "(-5) · (+3)",
+                    "answer": "-15"
+                },
+                {
+                    "statement": "(-8) · (-4)",
+                    "answer": "32"
+                },
+                {
+                    "statement": "(-12) : (+4)",
+                    "answer": "-3"
+                },
+                {
+                    "statement": "5 - 8 + 3",
+                    "answer": "0"
+                }
+            ],
+            "difficulty": 1,
+            "hints": [
+                "Signos iguales → positivo",
+                "Signos diferentes → negativo",
+                "Primero multiplicaciones/divisiones, luego sumas/restas"
+            ],
+            "allowInput": true
+        },
+        {
+            "id": "ent-b02",
+            "type": "batch",
+            "batchTitle": "Más operaciones con enteros",
+            "items": [
+                {
+                    "statement": "(+9) - (+12)",
+                    "answer": "-3"
+                },
+                {
+                    "statement": "(-7) · (-2)",
+                    "answer": "14"
+                },
+                {
+                    "statement": "(-18) : (-6)",
+                    "answer": "3"
+                },
+                {
+                    "statement": "(-4) + (-5)",
+                    "answer": "-9"
+                },
+                {
+                    "statement": "(+6) · (-3)",
+                    "answer": "-18"
+                }
+            ],
+            "difficulty": 1,
+            "hints": [
+                "Menos por menos = más",
+                "Más por menos = menos",
+                "Sumar negativos: suma valores y pon signo negativo"
+            ],
+            "allowInput": true
+        },
+        {
+            "id": "ent-b03",
+            "type": "batch",
+            "batchTitle": "Operaciones combinadas",
+            "items": [
+                {
+                    "statement": "(-2) · (-3) · (+5)",
+                    "answer": "30"
+                },
+                {
+                    "statement": "(-20) : (-5) + 1",
+                    "answer": "5"
+                },
+                {
+                    "statement": "|(-7)| + |3|",
+                    "answer": "10"
+                },
+                {
+                    "statement": "(-1)⁵ · (-2)³",
+                    "answer": "8"
+                },
+                {
+                    "statement": "3 · (-4) + 10",
+                    "answer": "-2"
+                }
+            ],
+            "difficulty": 2,
+            "hints": [
+                "Cuenta signos negativos en multiplicaciones",
+                "Valor absoluto siempre positivo",
+                "Exponente impar con base negativa → negativo"
+            ],
+            "allowInput": true
+        },
+        {
+            "id": "ent-004",
+            "type": "single",
+            "statement": "Ordena de menor a mayor: -5, 3, -1, 0, -8, 7",
+            "answer": "-8, -5, -1, 0, 3, 7",
+            "difficulty": 1,
+            "hints": [
+                "Los números negativos siempre son menores que los positivos",
+                "Cuanto más negativo, más pequeño"
+            ]
+        },
+        {
+            "id": "ent-005",
+            "type": "single",
+            "statement": "La temperatura a las 6 de la mañana era de -4 °C. A mediodía subió 9 grados y por la noche bajó 5 grados. ¿Cuál es la temperatura por la noche?",
+            "answer": "0 °C",
+            "difficulty": 2,
+            "hints": [
+                "Empieza en -4",
+                "Sube 9: -4 + 9 = 5",
+                "Baja 5: 5 - 5 = 0"
+            ],
+            "allowInput": true
+        },
+        {
+            "id": "batch-1771035379453",
+            "type": "batch",
+            "batchTitle": "Ejercicios variados",
+            "items": [
+                {
+                    "statement": "Calcula: 2 · (-3)² - 5 · (-1)³",
+                    "answer": "23"
+                },
+                {
+                    "statement": "Calcula: (-4) + 3 · [5 - (-2)] - 10",
+                    "answer": "7"
+                }
+            ],
+            "difficulty": 1,
+            "hints": []
+        },
+        {
+            "id": "batch-1771035567468",
+            "type": "batch",
+            "batchTitle": "Misión Submarina: ¡Al Rescate!",
+            "items": [
+                {
+                    "statement": "Un submarino está a -120 metros de profundidad. Sube 45 metros y luego baja 30 metros. ¿A qué profundidad está?",
+                    "answer": "-105 metros"
+                },
+                {
+                    "statement": "Un submarino está a -150 metros de profundidad. Sube 50 metros y luego baja 25 metros. ¿A qué profundidad está?",
+                    "answer": "-125 metros"
+                },
+                {
+                    "statement": "Un submarino está a -110 metros de profundidad. Sube 35 metros y luego baja 40 metros. ¿A qué profundidad está?",
+                    "answer": "-115 metros"
+                },
+                {
+                    "statement": "Un submarino está a -135 metros de profundidad. Sube 60 metros y luego baja 15 metros. ¿A qué profundidad está?",
+                    "answer": "-90 metros"
+                },
+                {
+                    "statement": "Un submarino está a -140 metros de profundidad. Sube 20 metros y luego baja 50 metros. ¿A qué profundidad está?",
+                    "answer": "-170 metros"
+                }
+            ],
+            "difficulty": 2,
+            "hints": [
+                "Recuerda: subir se anota como un número positivo (+) y bajar como un número negativo (-).",
+                "Haz la cuenta paso a paso: primero suma lo que sube a la posición inicial y al resultado réstale lo que baja."
+            ],
+            "allowInput": true
+        }
+    ]
+}

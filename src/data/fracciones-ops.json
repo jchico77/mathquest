@@ -1,0 +1,128 @@
+{
+    "topic": "Fracciones - Operaciones",
+    "icon": "➗",
+    "color": "#5F6CFF",
+    "exercises": [
+        {
+            "id": "fop-b01",
+            "type": "batch",
+            "batchTitle": "Sumas y restas de fracciones",
+            "items": [
+                {
+                    "statement": "1/3 + 2/3",
+                    "answer": "1"
+                },
+                {
+                    "statement": "2/5 + 1/5",
+                    "answer": "3/5"
+                },
+                {
+                    "statement": "5/8 - 3/8",
+                    "answer": "2/8 = 1/4"
+                },
+                {
+                    "statement": "7/10 - 3/10",
+                    "answer": "4/10 = 2/5"
+                },
+                {
+                    "statement": "1/4 + 2/4",
+                    "answer": "3/4"
+                }
+            ],
+            "difficulty": 1,
+            "hints": [
+                "Mismo denominador → suma/resta solo los numeradores",
+                "Al final, simplifica si puedes"
+            ]
+        },
+        {
+            "id": "fop-b02",
+            "type": "batch",
+            "batchTitle": "Multiplicaciones de fracciones",
+            "items": [
+                {
+                    "statement": "2/3 × 4/5",
+                    "answer": "8/15"
+                },
+                {
+                    "statement": "1/2 × 3/4",
+                    "answer": "3/8"
+                },
+                {
+                    "statement": "5/6 × 2/5",
+                    "answer": "10/30 = 1/3"
+                },
+                {
+                    "statement": "3/7 × 7/3",
+                    "answer": "1"
+                },
+                {
+                    "statement": "4/9 × 3/2",
+                    "answer": "12/18 = 2/3"
+                }
+            ],
+            "difficulty": 1,
+            "hints": [
+                "Numerador × numerador, denominador × denominador",
+                "Simplifica antes de multiplicar si puedes"
+            ]
+        },
+        {
+            "id": "fop-b03",
+            "type": "batch",
+            "batchTitle": "Divisiones de fracciones",
+            "items": [
+                {
+                    "statement": "3/4 : 2/5",
+                    "answer": "15/8"
+                },
+                {
+                    "statement": "1/2 : 1/3",
+                    "answer": "3/2"
+                },
+                {
+                    "statement": "5/6 : 5/3",
+                    "answer": "1/2"
+                },
+                {
+                    "statement": "2/7 : 4/7",
+                    "answer": "1/2"
+                },
+                {
+                    "statement": "3/5 : 6/10",
+                    "answer": "1"
+                }
+            ],
+            "difficulty": 2,
+            "hints": [
+                "Dividir fracciones = multiplicar por la inversa",
+                "a/b : c/d = a/b × d/c"
+            ]
+        },
+        {
+            "id": "batch-1771035436560",
+            "type": "batch",
+            "batchTitle": "Ejercicios variados",
+            "items": [
+                {
+                    "statement": "Calcula: 2/5 + 1/3",
+                    "answer": "11/15"
+                },
+                {
+                    "statement": "Calcula: 3/4 - 1/6",
+                    "answer": "7/12"
+                },
+                {
+                    "statement": "Calcula: 1/2 + 1/3 + 1/6",
+                    "answer": "1 (ó 6/6)"
+                },
+                {
+                    "statement": "Calcula: 2/3 × (1/2 + 3/4)",
+                    "answer": "5/6"
+                }
+            ],
+            "difficulty": 1,
+            "hints": []
+        }
+    ]
+}

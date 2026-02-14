@@ -1,0 +1,74 @@
+{
+    "topic": "Porcentajes y Proporcionalidad",
+    "icon": "📊",
+    "color": "#00D2D3",
+    "exercises": [
+        {
+            "id": "batch-1771035466948",
+            "type": "batch",
+            "batchTitle": "Ejercicios variados",
+            "items": [
+                {
+                    "statement": "Calcula el 25% de 80",
+                    "answer": "20"
+                },
+                {
+                    "statement": "Calcula el 15% de 200",
+                    "answer": "30"
+                },
+                {
+                    "statement": "¿Qué porcentaje es 15 de 60?",
+                    "answer": "25%"
+                }
+            ],
+            "difficulty": 1,
+            "hints": []
+        },
+        {
+            "id": "batch-1771035477602",
+            "type": "batch",
+            "batchTitle": "Ejercicios variados",
+            "items": [
+                {
+                    "statement": "Un jersey cuesta 40 € y tiene un 20% de descuento. ¿Cuánto pagas?",
+                    "answer": "32 €"
+                },
+                {
+                    "statement": "Si 3 kg de manzanas cuestan 4,50 €, ¿cuánto cuestan 5 kg?",
+                    "answer": "7,50 €"
+                },
+                {
+                    "statement": "Dos magnitudes son directamente proporcionales. Si x=4 cuando y=10, ¿cuánto vale y cuando x=6?",
+                    "answer": "15"
+                }
+            ],
+            "difficulty": 1,
+            "hints": []
+        },
+        {
+            "id": "batch-1771035486320",
+            "type": "batch",
+            "batchTitle": "Ejercicios variados",
+            "items": [
+                {
+                    "statement": "Un artículo costaba 50 € y ahora cuesta 60 €. ¿Qué porcentaje ha subido?",
+                    "answer": "20%"
+                },
+                {
+                    "statement": "Si 4 obreros tardan 6 días en hacer una obra, ¿cuántos días tardarán 8 obreros?",
+                    "answer": "3 días"
+                },
+                {
+                    "statement": "Aplica un IVA del 21% a un producto de 100 €. ¿Cuál es el precio final?",
+                    "answer": "121 €"
+                },
+                {
+                    "statement": "En una clase hay 25 alumnos. El 60% son chicas. ¿Cuántos chicos hay?",
+                    "answer": "10 chicos"
+                }
+            ],
+            "difficulty": 1,
+            "hints": []
+        }
+    ]
+}
