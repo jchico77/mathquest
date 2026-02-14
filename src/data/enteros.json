@@ -144,7 +144,8 @@
                 }
             ],
             "difficulty": 1,
-            "hints": []
+            "hints": [],
+            "allowInput": true
         },
         {
             "id": "batch-1771035567468",

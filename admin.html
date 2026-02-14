@@ -338,71 +338,82 @@
     <div class="toast" id="toast"></div>
 
     <script type="module">
-        // Import all data files
-        import enterosData from './src/data/enteros.json';
-        import potenciasData from './src/data/potencias.json';
-        import fraccionesData from './src/data/fracciones.json';
-        import fraccionesOpsData from './src/data/fracciones-ops.json';
-        import porcentajesData from './src/data/porcentajes.json';
-        import probabilidadData from './src/data/probabilidad.json';
-        import algebraData from './src/data/algebra.json';
-
-        const allTopics = [enterosData, potenciasData, fraccionesData, fraccionesOpsData, porcentajesData, probabilidadData, algebraData];
-        const topicFilenames = ['enteros.json', 'potencias.json', 'fracciones.json', 'fracciones-ops.json', 'porcentajes.json', 'probabilidad.json', 'algebra.json'];
-
+        let allTopics = [];
         let selected = new Set();
 
         window.allTopics = allTopics;
 
+        async function loadTopics() {
+            try {
+                const res = await fetch('/api/topics');
+                if (!res.ok) throw new Error('Error cargando temas');
+                const data = await res.json();
+                // Map DB 'title' to 'topic' for compatibility
+                allTopics = data.map(t => ({ ...t, topic: t.title }));
+                renderAll();
+            } catch (err) {
+                console.error(err);
+                showToast('❌ Error cargando temas: ' + err.message);
+            }
+        }
+
         function renderAll() {
             const container = document.getElementById('topics');
+            if (allTopics.length === 0) {
+                container.innerHTML = '<p style="text-align:center; padding:2rem; opacity:0.6;">Cargando temas...</p>';
+                return;
+            }
+
             container.innerHTML = allTopics.map((topic, tIdx) => {
                 const batchCount = topic.exercises.filter(e => e.type === 'batch').length;
                 const singleCount = topic.exercises.filter(e => e.type !== 'batch').length;
 
                 const exercisesHTML = topic.exercises.map((ex, eIdx) => {
+                    const key = `${tIdx}-${eIdx}`;
+
                     if (ex.type === 'batch') {
                         const itemsHTML = ex.items.map((item, iIdx) =>
                             `<div class="bi">${iIdx + 1}. ${item.statement} = ${item.answer}</div>`
                         ).join('');
                         return `
-              <div class="batch-group">
-                <div class="batch-label">
-                    <span>📦 ${ex.batchTitle || 'Lote sin título'} (${ex.items.length} items)</span>
-                    <label style="font-size:0.8rem; margin-left:1rem; cursor:pointer; display:flex; align-items:center; gap:0.3rem;">
-                        <input type="checkbox" ${ex.allowInput ? 'checked' : ''} onchange="updateProp(${tIdx}, ${eIdx}, 'allowInput', this.checked)"> 📝 Permitir Texto
-                    </label>
-                </div>
-                <div class="batch-items">${itemsHTML}</div>
-              </div>
-            `;
+                          <div class="batch-group">
+                            <div class="batch-label">
+                                <span>📦 ${ex.batchTitle || 'Lote sin título'} (${ex.items.length} items)</span>
+                                <label style="font-size:0.8rem; margin-left:1rem; cursor:pointer; display:flex; align-items:center; gap:0.3rem;">
+                                    <input type="checkbox" ${ex.allowInput ? 'checked' : ''} onchange="updateProp(${tIdx}, ${eIdx}, 'allowInput', this.checked)"> 📝 Permitir Texto
+                                </label>
+                            </div>
+                            <div class="batch-items">${itemsHTML}</div>
+                          </div>
+                        `;
                     } else {
-                        const key = `${tIdx}-${eIdx}`;
                         return `
-              <div class="ex-item">
-                <input type="checkbox" data-key="${key}" onchange="toggleSelect('${key}', this.checked)" ${selected.has(key) ? 'checked' : ''} />
-                <span class="badge badge--single">SOLO</span>
-                <span class="statement">${ex.statement}</span>
-                <span class="answer">→ ${ex.answer}</span>
-                <label style="font-size:0.8rem; margin-left:auto; cursor:pointer; display:flex; align-items:center; gap:0.3rem;">
-                    <input type="checkbox" ${ex.allowInput ? 'checked' : ''} onchange="updateProp(${tIdx}, ${eIdx}, 'allowInput', this.checked)"> 📝 Texto
-                </label>
-              </div>
-            `;
+                          <div class="ex-item">
+                            <input type="checkbox" data-key="${key}" onchange="toggleSelect('${key}', this.checked)" ${selected.has(key) ? 'checked' : ''} />
+                            <span class="badge badge--single">SOLO</span>
+                            <span class="statement">${ex.statement}</span>
+                            <span class="answer">→ ${ex.answer}</span>
+                            <label style="font-size:0.8rem; margin-left:auto; cursor:pointer; display:flex; align-items:center; gap:0.3rem;">
+                                <input type="checkbox" ${ex.allowInput ? 'checked' : ''} onchange="updateProp(${tIdx}, ${eIdx}, 'allowInput', this.checked)"> 📝 Texto
+                            </label>
+                          </div>
+                        `;
                     }
                 }).join('');
 
                 return `
-          <div class="topic-section">
-            <div class="topic-header" onclick="toggleTopic(this)">
-              <span class="icon">${topic.icon}</span>
-              <span class="name">${topic.topic}</span>
-              <span class="counts">${batchCount} lotes · ${singleCount} solos</span>
-              <span class="arrow">▸</span>
-            </div>
-            <div class="exercise-list">${exercisesHTML}</div>
-          </div>
-        `;
+                  <div class="topic-card">
+                    <div class="topic-header" onclick="toggleTopic(this)">
+                      <div class="topic-title">
+                        <span class="topic-icon">${topic.icon}</span>
+                        <span>${topic.topic}</span>
+                      </div>
+                      <span class="counts">${batchCount} lotes · ${singleCount} solos</span>
+                      <span class="arrow">▸</span>
+                    </div>
+                    <div class="exercise-list">${exercisesHTML}</div>
+                  </div>
+                `;
             }).join('');
 
             updateToolbar();
@@ -421,7 +432,7 @@
 
             try {
                 for (let i = 0; i < allTopics.length; i++) {
-                    await saveTopic(topicFilenames[i], allTopics[i]);
+                    await saveTopic(allTopics[i].id, allTopics[i].exercises);
                 }
                 showToast('✅ TODOS los cambios guardados');
             } catch (err) {
@@ -470,7 +481,6 @@
             const [tIdx, eIdx] = selectedKey.split('-').map(Number);
             const topic = allTopics[tIdx];
             const originalEx = topic.exercises[eIdx];
-            const filename = topicFilenames[tIdx];
 
             const btn = document.getElementById('aiBtn');
             const originalText = btn.textContent;
@@ -507,7 +517,7 @@
                 };
 
                 topic.exercises[eIdx] = newBatch;
-                await saveTopic(filename, topic);
+                await saveTopic(topic.id, topic.exercises);
 
                 selected.clear();
                 renderAll();
@@ -544,7 +554,6 @@
             const tIdx = Number(Object.keys(byTopic)[0]);
             const eIndices = byTopic[tIdx].sort((a, b) => b - a);
             const topic = allTopics[tIdx];
-            const filename = topicFilenames[tIdx];
 
             const batchItems = eIndices.map(eIdx => {
                 const ex = topic.exercises[eIdx];
@@ -567,20 +576,20 @@
             const insertPos = Math.min(...byTopic[tIdx]);
             topic.exercises.splice(insertPos, 0, batchEx);
 
-            await saveTopic(filename, topic);
+            await saveTopic(topic.id, topic.exercises);
 
             selected.clear();
             renderAll();
             showToast(`✅ Agrupados ${batchItems.length} ejercicios en un lote`);
         };
 
-        async function saveTopic(filename, data) {
+        async function saveTopic(id, exercises) {
             const res = await fetch('/api/save-topic', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ filename, data })
+                body: JSON.stringify({ id, exercises })
             });
-            if (!res.ok) throw new Error('Error guardando archivo');
+            if (!res.ok) throw new Error('Error guardando en base de datos');
         }
 
         window.showToast = (msg) => {
@@ -590,7 +599,7 @@
             setTimeout(() => t.classList.remove('show'), 2500);
         };
 
-        renderAll();
+        loadTopics();
     </script>
 </body>
 

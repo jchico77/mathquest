@@ -2,12 +2,9 @@ import 'dotenv/config';
 import express from 'express';
 import cors from 'cors';
 import { GoogleGenAI } from '@google/genai';
-import fs from 'fs/promises';
-import path from 'path';
-import { fileURLToPath } from 'url';
+import { createClient } from '@supabase/supabase-js';
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
+const supabase = createClient(process.env.SUPABASE_URL, process.env.SUPABASE_SERVICE_ROLE);
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -21,7 +18,7 @@ const GEMINI_API_KEY = process.env.GEMINI_API_KEY;
 if (!GEMINI_API_KEY) {
     console.error('❌ ERROR: Configura GEMINI_API_KEY en el fichero .env');
     console.error('   Ejemplo: set GEMINI_API_KEY=tu_api_key_aqui');
-    process.exit(1);
+    if (process.env.NODE_ENV !== 'production') process.exit(1);
 }
 
 const ai = new GoogleGenAI({ apiKey: GEMINI_API_KEY });
@@ -57,33 +54,16 @@ RESPUESTA CORRECTA ESPERADA: ${expectedAnswer}
 ${hints ? `PISTAS DEL EJERCICIO: ${hints.join(', ')}` : ''}
 
 INSTRUCCIONES:
-1. Observa detenidamente la foto con la solución escrita a mano del alumno.
-2. Interpreta la escritura manuscrita del alumno (números, operaciones, ecuaciones, fracciones, etc.).
-3. Identifica qué ha respondido el alumno como resultado final.
-4. Compara con la respuesta correcta esperada.
-5. Determina si la respuesta es CORRECTA o INCORRECTA.
-
-Si es CORRECTA:
-- Felicita con entusiasmo usando expresiones españolas ("¡Genial!", "¡Lo has clavado!", "¡Eres un crack!")
-- Explica brevemente por qué está bien
-
-Si es INCORRECTA:
-- Sé amable y motivador ("¡Casi lo tienes!", "¡Buen intento!")
-- Identifica EXACTAMENTE en qué paso se ha equivocado
-- Explica la regla o truco para hacerlo bien
-- Muestra la resolución paso a paso de forma clara
-- Usa ejemplos sencillos si hace falta
-
-IMPORTANTE: Responde EXCLUSIVAMENTE en JSON válido con esta estructura exacta, sin markdown ni texto adicional:
-{
-  "correcto": true/false,
-  "respuestaAlumno": "lo que has interpretado que el alumno ha escrito",
-  "mensaje": "mensaje corto de felicitación o ánimo (máx 2 frases)",
-  "explicacion": "explicación detallada de por qué está bien o mal, identificando el error concreto si lo hay",
-  "truco": "un truco o regla mnemotécnica para recordar cómo se hace este tipo de ejercicio (siempre incluir aunque acierte)",
-  "pasos": ["paso 1: ...", "paso 2: ...", "paso 3: ..."],
-  "confianza": 0.0-1.0
-}`;
+1. Observa detenidamente la foto...
+...
+74: IMPORTANTE: Responde EXCLUSIVAMENTE en JSON válido...
+75: {
+...
+81:   "pasos": ["paso 1 sin numerar...", "paso 2 sin numerar..."],
+...
+REGLAS DE FORMATO:
+- En "pasos", NO pongas números (como "1.") al principio. El frontend ya pone los números.
+- En las fórmulas matemáticas, pon espacios alrededor de los signos igual y operadores (ej: " 2 + 3 = 5 ").`;
 
         console.log(`\n🤖 [#${reqId}] ENVIANDO A ${GEMINI_MODEL}...`);
         console.log(`📤 Prompt (${prompt.length} chars):`);
@@ -269,10 +249,8 @@ app.post('/api/help', async (req, res) => {
 
         if (isBatch) {
             console.log(`📋 Batch ayuda: "${batchTitle}"`);
-            items?.forEach((item, i) => console.log(`   ${i + 1}. ${item.statement} = ${item.answer}`));
         } else {
             console.log(`📝 Ejercicio: "${statement}"`);
-            console.log(`✅ Respuesta: "${expectedAnswer}"`);
         }
 
         let prompt;
@@ -285,12 +263,14 @@ ${itemsList}
 ${hints ? `PISTAS: ${hints.join(', ')}` : ''}
 
 REGLAS: Sé breve. Nada de frases motivacionales largas. Solo matemáticas claras.
+- NO numeres los pasos en el array JSON.
+- Separa bien los signos matemáticos con espacios (ej: " = ").
 
 Responde en JSON válido:
 {
   "mensaje": "frase corta de ánimo (máx 8 palabras)",
   "explicacion": "regla matemática aplicable, directa, 1-2 frases",
-  "pasos": ["resuelve cada ejercicio en una línea: '1. 3+5 = 8'"],
+  "pasos": ["resuelve ejercicio 1...", "resuelve ejercicio 2..."],
   "truco": "truco corto y práctico, sin adornos"
 }`;
         } else {
@@ -300,13 +280,15 @@ EJERCICIO: ${statement}
 RESPUESTA CORRECTA: ${expectedAnswer}
 ${hints ? `PISTAS: ${hints.join(', ')}` : ''}
 
-REGLAS: Sé breve. Nada de frases motivacionales largas. Solo matemáticas claras. Pasos numerados cortos.
+REGLAS: Sé breve. Nada de frases motivacionales largas. Solo matemáticas claras.
+- NO numeres los pasos.
+- Separa bien los signos (ej: " 2 + 2 = 4 ").
 
 Responde en JSON válido:
 {
   "mensaje": "frase corta de ánimo (máx 8 palabras)",
   "explicacion": "método para resolver, directo, 1-2 frases",
-  "pasos": ["paso 1: operación concreta", "paso 2: resultado"],
+  "pasos": ["paso 1 sin número...", "paso 2 sin número..."],
   "truco": "truco corto y práctico, sin adornos"
 }`;
         }
@@ -407,7 +389,6 @@ app.post('/api/evaluate-batch-text', async (req, res) => {
     console.log(`\n🚀 [#${reqId}] EVALUANDO LOTE TEXTO...`);
 
     const { items, userAnswers, topic } = req.body;
-    // items: [{statement, answer}, ...], userAnswers: ["result1", "result2", ...]
 
     const questionsPrompt = items.map((item, i) =>
         `${i + 1}. Pregunta: "${item.statement}", Respuesta Correcta: "${item.answer}", Respuesta Alumno: "${userAnswers[i] || ''}"`
@@ -508,27 +489,54 @@ Responde EXCLUSIVAMENTE en JSON válido:
     }
 });
 
-// --- Save Topic Endpoint ---
-app.post('/api/save-topic', async (req, res) => {
+app.get('/api/topics', async (req, res) => {
     try {
-        const { filename, data } = req.body;
-        if (!filename || !data) throw new Error('Faltan datos (filename o data)');
+        console.log('📡 Fetching topics from Supabase...');
+        const { data, error } = await supabase
+            .from('topics')
+            .select('*')
+            .order('id');
 
-        // Path to src/data/filename
-        const filePath = path.join(__dirname, 'src', 'data', filename);
+        if (error) throw error;
 
-        console.log(`💾 Guardando en: ${filePath}`);
-        await fs.writeFile(filePath, JSON.stringify(data, null, 4), 'utf-8');
+        console.log(`✅ Fetched ${data?.length} topics`);
+        if (!data || data.length === 0) console.warn('⚠️  DB is empty!');
 
-        console.log(`✅ Archivo guardado correctamente`);
-        res.json({ success: true });
+        res.json(data);
     } catch (error) {
-        console.error('💥 Error guardando archivo:', error);
-        res.status(500).json({ error: 'Error al guardar archivo', details: error.message });
+        console.error('💥 Error fetching topics:', error);
+        res.status(500).json({ error: 'Error fetching topics' });
     }
 });
 
-app.listen(PORT, () => {
-    console.log(`🚀 MathQuest Server corriendo en http://localhost:${PORT}`);
-    console.log(`📡 Usando modelo: ${GEMINI_MODEL}`);
+app.post('/api/save-topic', async (req, res) => {
+    try {
+        const { id, exercises } = req.body;
+
+        if (!id || !exercises) throw new Error('Faltan datos (id o exercises)');
+
+        console.log(`💾 Guardando tema ID: ${id} (${exercises.length} ejercicios)`);
+
+        const { error } = await supabase
+            .from('topics')
+            .update({ exercises })
+            .eq('id', id);
+
+        if (error) throw error;
+
+        console.log(`✅ Tema actualizado en Supabase`);
+        res.json({ success: true });
+    } catch (error) {
+        console.error('💥 Error guardando tema:', error);
+        res.status(500).json({ error: 'Error al guardar tema', details: error.message });
+    }
 });
+
+if (process.env.NODE_ENV !== 'production') {
+    app.listen(PORT, () => {
+        console.log(`🚀 MathQuest Server corriendo en http://localhost:${PORT}`);
+        console.log(`📡 Usando modelo: ${GEMINI_MODEL}`);
+    });
+}
+
+export default app;

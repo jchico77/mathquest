@@ -2,16 +2,13 @@
 import './style.css';
 
 // Import exercise data
-import enterosData from './data/enteros.json';
-import potenciasData from './data/potencias.json';
-import fraccionesData from './data/fracciones.json';
-import fraccionesOpsData from './data/fracciones-ops.json';
-import porcentajesData from './data/porcentajes.json';
-import probabilidadData from './data/probabilidad.json';
-import algebraData from './data/algebra.json';
-
+// Import exercise data - REMOVED (Now fetched from API)
 // ===== State =====
-const topics = [enterosData, potenciasData, fraccionesData, fraccionesOpsData, porcentajesData, probabilidadData, algebraData];
+let topics = [];
+
+
+const canvas = document.getElementById('confetti-canvas');
+const ctx = canvas.getContext('2d');
 
 const state = {
   screen: 'home', // home | round | feedback | batchFeedback | help | results
@@ -1057,4 +1054,23 @@ window.__nextExercise = () => {
 };
 
 // ===== Init =====
-render();
+async function loadTopics() {
+  try {
+    const res = await fetch('/api/topics');
+    if (!res.ok) throw new Error('Error loading topics');
+    const data = await res.json();
+    // Map DB 'title' to 'topic' property for compatibility
+    topics = data.map(t => ({
+      ...t,
+      topic: t.title
+    }));
+    // console.log('✅ Topics loaded:', topics.length);
+    render();
+  } catch (err) {
+    console.error('Failed to load topics:', err);
+    document.getElementById('app').innerHTML = `<div style="color:red; padding:2rem;">Error cargando datos: ${err.message}. Asegúrate de que el backend está corriendo.</div>`;
+  }
+}
+
+loadTopics();
+window.addEventListener('resize', () => canvas.width = window.innerWidth);
